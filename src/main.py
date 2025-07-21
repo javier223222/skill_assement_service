@@ -1,4 +1,4 @@
-from fastapi import FastAPI,HTTPException
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from infrastructure.messaging.rabbitmq_producer import rabbitmq_producer
 from infrastructure.database.mongo_connection import mongo_connection
@@ -6,10 +6,8 @@ from infrastructure.database.mongo_connection import mongo_connection
 from domain.entities.skill import Skill
 from presentation.api.skill_controller import skill_router
 from presentation.api.assement_controller import assement_router
-from pydantic import BaseModel
-import asyncio
-from typing import List
-import json
+
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -48,4 +46,7 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
+
+
+    

@@ -7,7 +7,7 @@ class GetQuestionUseCase(BaseAssessmentUseCase):
     async def execute(self, question: AnswerQuestionBaseDto) -> dict:
       try:
          
-          print(question)
+      
           session=await self.user_session_repository.get_user_session_by_id(question.id_session)
           find_question=await self.question_repository.get_question_by_id(question.id_question)
          
@@ -35,5 +35,5 @@ class GetQuestionUseCase(BaseAssessmentUseCase):
             "next_question_id": question.id_question + 1 if question.id_question < session.total_questions - 1 else None,
           }
       except Exception as e:
-            print(f"Error retrieving question: {str(e)}")
+            
             raise Exception(f"Error retrieving question: {str(e)}")

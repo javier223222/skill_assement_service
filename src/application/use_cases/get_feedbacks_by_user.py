@@ -93,7 +93,7 @@ class GetFeedbacksByUser:
 
             }
           except Exception as e:
-             print(f"Error fetching user sessions: {str(e)}")
+             
              raise Exception(f"Error fetching user sessions: {str(e)}")
         
 

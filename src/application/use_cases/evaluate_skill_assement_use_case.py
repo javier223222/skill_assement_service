@@ -19,13 +19,24 @@ class EvaluateSkillAssessment:
         session = await self.user_session_repository.get_user_session_by_id(session_id)
         feedBackbySessionId= await self.feedback_repository.get_feedback_by_session_id(session_id)
         questions = await self.question_repository.find_questions_by_skillid(session.skill_id)
-        print("Session:", feedBackbySessionId)
+        
         if feedBackbySessionId:
+            await self.rabbitmq_producer.publish_message(
+                message={
+                    "event_type": "skill_assessment_already_evaluated",
+                    "session_id": session_id,
+                    "feedback_id": str(feedBackbySessionId.id)
+                },
+                queue_name="profile_updates",
+                priority=5
+            )
+
             return {
                 "message": "Ya se ha evaluado esta sesión",
                 "session_id": session_id,
                 "feedback": feedBackbySessionId
             }
+        
         
         if not session:
             raise Exception("Session not found")

@@ -107,12 +107,13 @@ class RabbitMQProducer:
                     content_type="application/json",
                     priority=priority,
                     headers={
-                        "source": "soft-skills-practice-service",
+                        "source": "skills-practice-assessment-service",
                         "message_type": message.get("event_type", "unknown")
                     }
                 ),
                 routing_key=routing_key or queue_name
             )
+            print(f"Mensaje publicado a cola '{queue_name}': {message.get('event_type', 'unknown')}")
 
             logger.info(f"Mensaje publicado a cola '{queue_name}': {message.get('event_type', 'unknown')}")
 
