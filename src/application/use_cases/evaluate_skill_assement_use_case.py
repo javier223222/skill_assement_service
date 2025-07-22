@@ -21,15 +21,7 @@ class EvaluateSkillAssessment:
         questions = await self.question_repository.find_questions_by_skillid(session.skill_id)
         
         if feedBackbySessionId:
-            await self.rabbitmq_producer.publish_message(
-                message={
-                    "event_type": "skill_assessment_already_evaluated",
-                    "session_id": session_id,
-                    "feedback_id": str(feedBackbySessionId.id)
-                },
-                queue_name="profile_updates",
-                priority=5
-            )
+            
 
             return {
                 "message": "Ya se ha evaluado esta sesión",
