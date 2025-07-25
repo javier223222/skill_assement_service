@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from infrastructure.messaging.rabbitmq_producer import rabbitmq_producer
+
 from infrastructure.database.mongo_connection import mongo_connection
 
 from domain.entities.skill import Skill
@@ -13,10 +13,9 @@ load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await rabbitmq_producer.connect()
     await mongo_connection.connect()
     yield
-    await rabbitmq_producer.disconnect()
+    
     await mongo_connection.disconnect()
 app = FastAPI(
     title="Skill Assentment Service",

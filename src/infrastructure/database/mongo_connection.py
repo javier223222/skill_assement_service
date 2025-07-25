@@ -1,7 +1,5 @@
-import os
 import logging
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
-from typing import Optional
+from motor.motor_asyncio import AsyncIOMotorClient
 from infrastructure.config.app_config import config 
 from beanie import init_beanie
 from domain.entities.question import Question
