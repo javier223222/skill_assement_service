@@ -36,6 +36,7 @@ class GetFeedBackByIdUseCase:
     async def execute(self, feedback_id: str) -> Dict[str, Any]:
         try:
             feedback = await self.feedback_repository.get_feedback_by_id(feedback_id)
+            print(f"Feedback retrieved: {feedback}")
             session= await self.user_session_repository.get_user_session_by_id(feedback.session_id)
             skill = await self.skill_repository.find_by_id(session.skill_id) if session else None
 

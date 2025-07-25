@@ -81,7 +81,7 @@ class RabbitMQProducer:
             enriched_message = {
                 **message,
                 "timestamp": datetime.utcnow().isoformat(),
-                "service": "soft-skills-practice-service",
+                "service": "skill-Assement-producer",
                 "version": "1.0.0",
                 "queue": queue_name
             }

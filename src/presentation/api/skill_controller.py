@@ -11,6 +11,7 @@ from ..schemas.update_skill_model import UpdateSkillModel
 from domain.repositories.skill_repository import SkillRepository
 from ..schemas.get_all_skill_response_model import GetAllSkillResponseModel
 from domain.repositories.question_repository import QuestionRepository
+
 import json
 skill_router = APIRouter(prefix="/skills",tags=["Skills"])
 
@@ -84,8 +85,9 @@ async def update_skill( skill: Skill):
         skill_repository = SkillRepository()
         update_skill_use_case = UpdateSkillUseCase(skill_repository)
         
-        updated_skill = await update_skill_use_case.execute( skill_data=skill)
-        
+
+        updated_skill = await update_skill_use_case.execute(skill_data=skill)
+
         return json.loads(updated_skill.model_dump_json())
 
         

@@ -3,7 +3,7 @@ from domain.repositories.user_session_repository import UserSessionRepository
 from domain.repositories.assement_feedback_repository import AssementFeedBackRepository
 from domain.entities.assement_feedback import AssementFeedback,AssementResult,RelevantSkillToFocusOn,RecommendeToolsAndFrameWorks,QuestionAnalysis
 from infrastructure.messaging.rabbitmq_producer import RabbitMQProducer
-
+from datetime import datetime
 from typing import List
 from typing import Dict, Any
 
@@ -72,11 +72,13 @@ class EvaluateSkillAssessment:
         )
         await self.rabbitmq_producer.publish_message(
             message={
-                "event_type": "skill_assessment_evaluated",
-                "points_earned": points,
-
+            "event": "Skill Assement Finished",
+            "type": "Skill Assement",
+            "created_at": str(datetime.utcnow()),
+            "points_earned": points,
+            "user_id": session.user_id,
             },
-            queue_name="profile_updates",
+            queue_name="any",
             priority=5
 
         )

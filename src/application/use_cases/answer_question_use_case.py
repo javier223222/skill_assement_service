@@ -14,7 +14,10 @@ class AnswerQuestionUseCase(BaseAssessmentUseCase):
                 raise Exception("Session is already finished")
             if (session.user_id != question.id_user):
                 raise Exception("User ID does not match the session user ID")
-            
+          
+            for existing_answer in session.answers:
+                if existing_answer["id_question"] == question.id_question:
+                    raise Exception("Question already answered")
             
             if(question.id_question <0 or question.id_question> session.total_questions):
                 raise Exception("Invalid question ID")
@@ -24,6 +27,7 @@ class AnswerQuestionUseCase(BaseAssessmentUseCase):
                 raise Exception("Question already answered")
             if not find_question:
                 raise Exception("Question not found")
+            
             
             if session.actual_number_of_questions == session.total_questions:
                 session.is_finished = True
