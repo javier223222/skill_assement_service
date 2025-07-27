@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException,status
-
+from pydantic import ValidationError
 
 from domain.repositories.question_repository import QuestionRepository
 from domain.repositories.user_session_repository import UserSessionRepository
@@ -39,7 +39,8 @@ async def create_question(skill_id: str,request: StartAssessmentModel):
             "Assessment": generated_assement,
             "next_step":1
         }
-    
+    except ValidationError as e:
+        raise HTTPException(status_code=422, detail=f"Error de validación: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 @assement_router.get("/session/{session_id}")
@@ -87,6 +88,8 @@ async def answer_question(id_question: int, request: AnswerQuestionModel):
         ))
 
         return result
+    except ValidationError as e:
+        raise HTTPException(status_code=422, detail=f"Error de validación: {str(e)}")
 
 
     except Exception as e:

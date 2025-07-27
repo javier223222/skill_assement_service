@@ -11,23 +11,24 @@ from ..schemas.update_skill_model import UpdateSkillModel
 from domain.repositories.skill_repository import SkillRepository
 from ..schemas.get_all_skill_response_model import GetAllSkillResponseModel
 from domain.repositories.question_repository import QuestionRepository
+from pydantic import ValidationError
 
 import json
 skill_router = APIRouter(prefix="/skills",tags=["Skills"])
 
 @skill_router.post("/",response_model=Skill,status_code=status.HTTP_201_CREATED)
 async def create_skill(skill: CreateSkillModel):
-
-    
-    
     try:
         skill_repository = SkillRepository()
         create_skill_use_case = CreateSkillUseCase(skill_repository)
         
         created_skill = await create_skill_use_case.execute(skill=Skill(**skill.model_dump()))
 
+        created_skill = await create_skill_use_case.execute(Skill(**skill.dict()))
         
         return json.loads(created_skill.model_dump_json())
+    except ValidationError as e:
+        raise HTTPException(status_code=422, detail=f"Error de validación: {str(e)}")
     except Exception as e:
         
         raise HTTPException(status_code=500, detail=str(e))

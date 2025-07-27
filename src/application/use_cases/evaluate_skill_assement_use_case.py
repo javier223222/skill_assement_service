@@ -3,9 +3,11 @@ from domain.repositories.user_session_repository import UserSessionRepository
 from domain.repositories.assement_feedback_repository import AssementFeedBackRepository
 from domain.entities.assement_feedback import AssementFeedback,AssementResult,RelevantSkillToFocusOn,RecommendeToolsAndFrameWorks,QuestionAnalysis
 from infrastructure.messaging.rabbitmq_producer import RabbitMQProducer
+from ...infrastructure.security import ContextualValidator, ValidationContext, BusinessRuleValidator
 from datetime import datetime
 from typing import List
 from typing import Dict, Any
+from pydantic import ValidationError
 
 class EvaluateSkillAssessment:
     def __init__(self, user_session_repository: UserSessionRepository, question_repository: QuestionRepository, feedback_repository: AssementFeedBackRepository, rabbitmq_producer: RabbitMQProducer):
@@ -13,10 +15,24 @@ class EvaluateSkillAssessment:
         self.question_repository = question_repository
         self.feedback_repository = feedback_repository
         self.rabbitmq_producer = rabbitmq_producer
+        self.validator = ContextualValidator()
+        self.business_validator = BusinessRuleValidator()
 
     async def execute(self, session_id: str) -> Dict[str, Any]:
      try:
+        # Validación de formato del session_id
+        if not session_id or len(session_id.strip()) == 0:
+            raise ValidationError("Session ID no puede estar vacío")
+        
         session = await self.user_session_repository.get_user_session_by_id(session_id)
+        if not session:
+            raise ValidationError(f"Sesión {session_id} no encontrada")
+        
+        # Validación de reglas de negocio para evaluación
+        is_valid_for_evaluation = await self.business_validator.validate_session_for_evaluation(session)
+        if not is_valid_for_evaluation:
+            raise ValidationError("La sesión no cumple con los requisitos para evaluación")
+        
         feedBackbySessionId= await self.feedback_repository.get_feedback_by_session_id(session_id)
         questions = await self.question_repository.find_questions_by_skillid(session.skill_id)
         
