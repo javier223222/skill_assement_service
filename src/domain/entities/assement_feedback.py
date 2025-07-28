@@ -8,7 +8,7 @@ class UserAnswer(BaseModel):
     answer: str
     is_correct: bool
 class QuestionAnalysis(BaseModel):
-    question_id: int
+    question_number: int  # Cambiar de question_id a question_number
     question: str
     subcategory: str
     correct_answer: str

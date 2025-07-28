@@ -211,14 +211,14 @@ class UserAnswer {
 }
 
 class QuestionAnalysis {
-  final int questionId;
+  final int questionNumber;  // Cambio de questionId a questionNumber
   final String question;
   final String subcategory;
   final String correctAnswer;
   final List<UserAnswer> userAnswers;
 
   QuestionAnalysis({
-    required this.questionId,
+    required this.questionNumber,  // Cambio de questionId a questionNumber
     required this.question,
     required this.subcategory,
     required this.correctAnswer,
@@ -227,7 +227,7 @@ class QuestionAnalysis {
 
   factory QuestionAnalysis.fromJson(Map<String, dynamic> json) {
     return QuestionAnalysis(
-      questionId: json['question_id'],
+      questionNumber: json['question_number'],  // Cambio de question_id a question_number
       question: json['question'],
       subcategory: json['subcategory'],
       correctAnswer: json['correct_answer'],

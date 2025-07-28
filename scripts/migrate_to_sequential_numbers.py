@@ -12,7 +12,7 @@ async def migrate_question_numbers():
     Migra las preguntas existentes para usar question_number secuencial (1, 2, 3, etc.)
     """
     # Conectar a MongoDB
-    mongodb_url = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
+    mongodb_url = os.getenv("MONGODB_URL", "mongodb://admin:password123@54.205.187.151:27017/skill_assement?authSource=admin")
     db_name = os.getenv("MONGODB_DB_NAME", "skill_assement")
     
     client = AsyncIOMotorClient(mongodb_url)

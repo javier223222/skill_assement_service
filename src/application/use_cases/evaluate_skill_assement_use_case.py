@@ -17,21 +17,21 @@ class EvaluateSkillAssessment:
     async def execute(self, session_id: str) -> Dict[str, Any]:
      try:
         session = await self.user_session_repository.get_user_session_by_id(session_id)
+        
+        # Verificar que la sesión existe antes de acceder a sus propiedades
+        if not session:
+            raise Exception("Session not found")
+        
         feedBackbySessionId= await self.feedback_repository.get_feedback_by_session_id(session_id)
-        questions = await self.question_repository.find_questions_by_skillid(session.skill_id)
         
         if feedBackbySessionId:
-            
-
             return {
                 "message": "Ya se ha evaluado esta sesión",
                 "session_id": session_id,
                 "feedback": feedBackbySessionId
             }
         
-        
-        if not session:
-            raise Exception("Session not found")
+        questions = await self.question_repository.find_questions_by_skillid(session.skill_id)
         if not session.is_finished:
             raise Exception("Session is not finished")
         
@@ -161,7 +161,7 @@ class EvaluateSkillAssessment:
 
         for question in questions:
             analysis_item = QuestionAnalysis(
-                question_id=question.id,
+                question_number=question.question_number,  # Usar question_number en lugar de question.id
                 question=question.question,
                 subcategory=question.subcategory,
                 correct_answer=question.correct_answer,
@@ -169,19 +169,14 @@ class EvaluateSkillAssessment:
             )
             question_analysis.append(analysis_item)
 
-        questions_map = {question.id: question for question in questions}
+        questions_map = {question.question_number: question for question in questions}  # Usar question_number como clave
         
-       
-        for question in questions:
-            
-            question_analysis.append(analysis_item)
-        
-       
+        # Procesar respuestas del usuario
         for answer in answers:
             if answer.id_question in questions_map:
-                
+                # Buscar el análisis correspondiente por question_number
                 for item in question_analysis:
-                    if item.question_id == answer.id_question:
+                    if item.question_number == answer.id_question:
                         is_correct = answer.answer == item.correct_answer
                         item.user_answers.append({
                             "answer": answer.answer,
