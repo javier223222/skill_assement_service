@@ -595,13 +595,13 @@ GET /assement/questions/3?id_user=user123&id_session=session_456
 **Response:** `201 Created`
 ```json
 {
-  "message": "Answer submitted successfully",
+  "message": "Answer recorded successfully",
   "session_id": "session_456",
-  "question_id": 3,
-  "answer_recorded": true,
-  "next_question": 4,
+  "question_answered": 3,
   "total_questions": 10,
-  "questions_answered": 3
+  "questions_answered": 3,
+  "is_completed": false,
+  "next_question": 4
 }
 ```
 

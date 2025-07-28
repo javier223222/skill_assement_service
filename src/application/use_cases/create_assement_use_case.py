@@ -56,7 +56,7 @@ class CreateAssessmentUseCase:
             user_id=user_id,
             skill_id=skill_id,
             total_questions=total_questions,
-            actual_number_of_questions=1
+            actual_number_of_questions=0  # Iniciar en 0, se incrementa al responder cada pregunta
         )
 
         session = await self.user_session_repository.create_user_session(session)
