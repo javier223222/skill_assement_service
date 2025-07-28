@@ -17,7 +17,7 @@ class GetQuestionUseCase(BaseAssessmentUseCase):
                 raise Exception("User ID does not match the session user ID")
             
             
-          if(question.id_question <0 or question.id_question> session.total_questions):
+          if(question.id_question < 1 or question.id_question > session.total_questions):
                 raise Exception("Invalid question ID")
           if not session:
                 raise Exception("Session not found")
@@ -27,12 +27,15 @@ class GetQuestionUseCase(BaseAssessmentUseCase):
           if not question:
             raise Exception("Question not found")
           return {
-            "id": find_question.id,
+            "id": find_question.question_number,
             "text": find_question.question,
             "options": find_question.options,
-            "has_next": question.id_question < session.total_questions - 1,
-            "has_previous": question.id_question > 0,
-            "next_question_id": question.id_question + 1 if question.id_question < session.total_questions - 1 else None,
+            "subcategory": find_question.subcategory,
+            "type": find_question.type,
+            "recommended_tools": find_question.recommended_tools,
+            "has_next": question.id_question < session.total_questions,
+            "has_previous": question.id_question > 1,
+            "next_question_id": question.id_question + 1 if question.id_question < session.total_questions else None,
           }
       except Exception as e:
             

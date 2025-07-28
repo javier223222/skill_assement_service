@@ -6,7 +6,7 @@ from datetime import datetime,timezone
 
 
 class Question(Document):
-    id: int = Field(default_factory=lambda: datetime.now(timezone.utc).timestamp(), index=True, description="Unique identifier for the question")
+    question_number: int = Field(..., index=True, description="Sequential number of the question (1, 2, 3, etc.)")
     skillid:str= Field( index=True, description="The ID of the skill associated with the question")
     subcategory: str = Field(..., index=True, description="The subcategory of the question")
     type: str = Field(..., description="The type of the question (e.g., multiple choice)")
@@ -19,7 +19,7 @@ class Question(Document):
     class Settings:
         collection = "questions"
         indexes = [
-            [("skillid", 1)],
+            [("skillid", 1), ("question_number", 1)],  # Índice compuesto para skillid + question_number
             [("subcategory", 1)],
             [("type", 1)],
             [("question", 1)]

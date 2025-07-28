@@ -19,7 +19,7 @@ class AnswerQuestionUseCase(BaseAssessmentUseCase):
                 if existing_answer["id_question"] == question.id_question:
                     raise Exception("Question already answered")
             
-            if(question.id_question <0 or question.id_question> session.total_questions):
+            if(question.id_question < 1 or question.id_question > session.total_questions):
                 raise Exception("Invalid question ID")
             if not session:
                 raise Exception("Session not found")

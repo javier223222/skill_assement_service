@@ -27,6 +27,7 @@ class CreateAssessmentUseCase:
         if findAquiz is None or findAquiz == []:
             
             generated_question = await self.gemini_service.generate_quiz_with_retry(skill.name, max_retries=5)
+            print(generated_question)
             
             
             if not generated_question or "questions" not in generated_question:
@@ -36,7 +37,7 @@ class CreateAssessmentUseCase:
             
             for i, question in enumerate(generated_question["questions"]):
                 question_data = {
-                    "id": question.get("id"),
+                    "question_number": i + 1,  # Número secuencial: 1, 2, 3, etc.
                     "skillid": str(skill.id),
                     "subcategory": question.get("subcategory"),
                     "type": question.get("type"),
